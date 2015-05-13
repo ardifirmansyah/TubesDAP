@@ -1,0 +1,5 @@
+1. nama program
+2. type record
+3. variable
+4. procedure / function
+   diurut mulai dari yang paling kecil

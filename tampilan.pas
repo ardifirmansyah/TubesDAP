@@ -17,46 +17,30 @@ begin
 	clrscr;
 	write('Masukkan username : '); readln(u1);
 	write('Masukkan password : '); readln(p1);
-	if (u1 = uc) and (p1 = pc) then begin
+	if (u1 = uc) and (p1 = pc) then
+	begin
 		clrscr;
+		kon:='a';                                                   //memberi status keluar dari perulangan
 		writeln('Menu User');
 	end
+	else if (u1 = ua) and (p1 = pa) then 
+	begin
+		clrscr;
+		kon:='a';													//memberi status keluar dari perulangan
+		writeln('Menu Admin');
+	end
 	else
-		if (u1 = ua) and (p1 = pa) then begin
-			clrscr;
-			writeln('Menu Admin');
-		end
-	else
-		begin
-			writeln();
-			writeln('Username atau password yang Anda masukkan salah');
-			write('Coba lagi? (y/n) : '); readln(kon);
-		end;
+	begin
+		writeln();
+		writeln('Username atau password yang Anda masukkan salah');
+		write('Coba lagi? (y/n) : '); readln(kon);
+	end;
 end;
 
 
-begin
-	clrscr;
-	write('Masukkan username : '); readln(u1);
-	write('Masukkan password : '); readln(p1);
-	if (u1 = uc) and (p1 = pc) then begin
-		clrscr;
-		writeln('Menu User');
-	end
-	else
-		if (u1 = ua) and (p1 = pa) then begin
-			clrscr;
-			writeln('Menu Admin');
-		end
-	else
-		begin
-			writeln();
-			writeln('Username atau password yang Anda masukkan salah');
-			write('Coba lagi? (y/n) : '); readln(kon);
 
-			while (kon='y') or (kon='Y') do
-			begin
-				MenuUtama();
-			end;
-		end;
+begin
+	repeat 															//menggunakan repeat karena sudah pasti dilakukan minimal 1 kali
+		MenuUtama();
+	until (kon<>'y');												//keluar perulangan jika kon <> y
 end.
