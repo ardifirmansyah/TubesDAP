@@ -48,48 +48,59 @@ end;
 
 procedure InputJadwal();
 begin
+	clrscr;
 	assign(jadwal,'JadwalKereta.dat');
-	write(jadwal);
+	rewrite(jadwal);
 	kon:='y';																		//memberi pernyataan bahwa akan masuk ke perulangan
 	while (kon='y') or (kon='Y') do
 	begin
 		Masukkan();
 	end;
 	clrscr;
-	write('Data telah disimpan. Akan exit program'); readln();
+	write('Data telah disimpan.'); readln();
 end;
 
 procedure MenuAdmin();
 begin
-	writeln('1. Input Jadwal Kereta');
-	writeln('2. Lihat Daftar Transaksi');
-	writeln('3. Lihat Detil Kereta');
-	writeln();
-	writeln('4. Keluar');
-	writeln();
-	write('Masukkan Pilihan : '); readln(pil);
-	case (pil) of
-	1	: begin
+	repeat 																			//membuat kondisi agar setelah pilihan tidak keluar dari menu admin
+		if (pil=4) then begin
+			writeln('Terima kasih :)');
+			exit;
+		end
+		else begin
 		clrscr;
-		InputJadwal();
-	end;
-	2	: begin
-		clrscr;
-		writeln('Menu Lihat Daftar Transaksi');
-	end;
-	3	: begin
-		clrscr;
-		writeln('Menu Detil Kereta');
-	end;
-	4	: begin
-		exit;
-	end;
-		else
-			begin
+		writeln('1. Input Jadwal Kereta');
+		writeln('2. Lihat Daftar Transaksi');
+		writeln('3. Lihat Detil Kereta');
+		writeln();
+		writeln('4. Keluar');
+		writeln();
+		write('Masukkan Pilihan : '); readln(pil);
+		case (pil) of
+		1	: begin
 			clrscr;
-			writeln('Input Anda Tidak Terdaftar. Akan exit program');
-			end;
+			InputJadwal();
 		end;
+		2	: begin
+			clrscr;
+			writeln('Menu Lihat Daftar Transaksi');
+		end;
+		3	: begin
+			clrscr;
+			writeln('Menu Detil Kereta');
+		end;
+		4	: begin
+			clrscr;
+			writeln('Terima kasih :)');
+		end;
+			else
+				begin
+				clrscr;
+				writeln('Input Anda Tidak Terdaftar. Akan exit program');
+				end;
+			end;			
+		end;
+	until (pil=4);
 end;
 
 procedure Login();
