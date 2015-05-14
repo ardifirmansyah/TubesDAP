@@ -4,7 +4,7 @@
 									  						  agar record file sebelumnya tidak terhapus
 }
 
-
+//PROCEDURE INPUT JADWAL
 
 program inputjadwal;
 uses crt;
@@ -15,6 +15,7 @@ type waktu = record
 end;
 
 type jadwalkereta = record
+	nomor : Integer;
 	asal : String;
 	tujuan : String;
 	berangkat : waktu;
@@ -31,8 +32,9 @@ var
 procedure Masukkan();
 begin
 	clrscr;
-	write('Masukkan asal kereta : '); readln(j.asal);
-	write('Masukkan tujuan kereta : '); readln(j.tujuan);
+	write('Masukkan Nomor Kereta : '); readln(j.nomor);
+	write('Masukkan stasiun asal : '); readln(j.asal);
+	write('Masukkan stasiun tujuan : '); readln(j.tujuan);
 	write('Masukkan jam keberangkatan : '); readln(j.berangkat.jam);
 	write('Masukkan menit keberangkatan : '); readln(j.berangkat.menit);
 	write('Masukkan jam tiba : '); readln(j.tiba.jam);
