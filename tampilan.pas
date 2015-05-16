@@ -6,6 +6,14 @@ type waktu = record
 	menit : Integer;
 end;
 
+type bangku = record
+	baris : Integer;
+	kolom : Integer;
+	kosong : Boolean;
+	nama : String;
+	ID : String;
+end;
+
 type jadwalkereta = record
 	nomor : Integer;
 	asal : String;
@@ -13,7 +21,8 @@ type jadwalkereta = record
 	berangkat : waktu;
 	tiba : waktu;
 	gerbong : Integer;
-	tarif : Integer;	
+	tarif : Integer;
+	kursi : bangku;
 end;
 
 var
@@ -21,7 +30,7 @@ var
 	kon:Char;		  //kon, konfirmasi pilihan ya atau tidak
 	jadwal : file of jadwalkereta;
 	j: jadwalkereta;
-	pil : Integer;
+	pil,i : Integer;
 
 const
 	uc = 'user';
@@ -57,7 +66,8 @@ begin
 		Masukkan();
 	end;
 	clrscr;
-	write('Data telah disimpan.'); readln();
+	write('Data telah disimpan.');
+	close(jadwal);
 end;
 
 procedure MenuAdmin();
@@ -80,14 +90,15 @@ begin
 		1	: begin
 			clrscr;
 			InputJadwal();
+			readln();
 		end;
 		2	: begin
 			clrscr;
-			writeln('Menu Lihat Daftar Transaksi');
+			writeln('Menu Lihat Daftar Transaksi'); readln();
 		end;
 		3	: begin
 			clrscr;
-			writeln('Menu Detil Kereta');
+			writeln('Menu Detil Kereta'); readln();
 		end;
 		4	: begin
 			clrscr;
@@ -97,10 +108,68 @@ begin
 				begin
 				clrscr;
 				writeln('Input Anda Tidak Terdaftar. Akan exit program');
+				readln();
+				exit;
 				end;
 			end;			
 		end;
 	until (pil=4);
+end;
+
+procedure penumpang();
+begin
+	assign(jadwal,'JadwalKereta.dat');
+	reset(jadwal);
+	writeln('No.   Asal       Tujuan        Berangkat   Tiba     Tarif');
+	for i := 1 to 4 do begin
+		read(jadwal,j);
+		writeln(j.nomor,'.    ',j.asal,'    ',j.tujuan,'    ',j.berangkat.jam,'.',j.berangkat.menit,'       ',j.tiba.jam,'.',j.tiba.menit,'    ',j.tarif);
+	end;
+	writeln();
+	write('Masukkan pilihan tujuan : '); readln(pil);
+	
+end;
+
+procedure MenuUser();
+begin
+	repeat 																			//membuat kondisi agar setelah pilihan tidak keluar dari menu admin
+		if (pil=3) then begin
+			writeln('Terima kasih :)');
+			exit;
+		end
+		else begin
+		clrscr;
+		writeln('1. Pesan tiket');
+		writeln('2. Edit / Batalkan pesanan');
+		writeln();
+		writeln('3. Keluar');
+		writeln();
+		write('Masukkan Pilihan : '); readln(pil);
+		case (pil) of
+		1	: begin
+			clrscr;
+			penumpang();
+			readln();
+		end;
+		2	: begin
+			clrscr;
+			writeln('Menu edit / batalkan pesanan');
+			readln();
+		end;
+		3	: begin
+			clrscr;
+			writeln('Terima kasih :)');
+		end;
+			else
+				begin
+				clrscr;
+				writeln('Input Anda Tidak Terdaftar. Akan exit program');
+				readln();
+				exit;
+				end;
+			end;			
+		end;
+	until (pil=3);
 end;
 
 procedure Login();
@@ -112,7 +181,7 @@ begin
 	begin
 		clrscr;
 		kon:='a';                                                   //memberi status keluar dari perulangan
-		writeln('Menu User');
+		MenuUser();
 	end
 	else if (u1 = ua) and (p1 = pa) then 
 	begin
