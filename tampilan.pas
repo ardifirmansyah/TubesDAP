@@ -125,7 +125,7 @@ begin
 	assign(jadwal,'JadwalKereta.dat');
 	reset(jadwal);
 	writeln('No.   Asal       Tujuan        Berangkat    Tiba     Tarif');
-	for i := 1 to 4 do begin
+	for i := 1 to FileSize(jadwal) do begin
 		read(jadwal,j);
 		gotoxy(1,i+1); write(j.nomor); gotoxy(7,i+1); write(j.asal); gotoxy(18,i+1); write(j.tujuan);
 		gotoxy(32,i+1); write(j.berangkat.jam,'.',j.berangkat.menit); gotoxy(45,i+1); write(j.tiba.jam,'.',j.tiba.menit);
@@ -203,23 +203,22 @@ begin
 					x:=x+1;
 				end;
 				z:=z+1;
-			end;
-		end;
-
-		for z := 1 to 4 do begin
-			for x := 1 to 10 do begin
-				for c := 1 to 4 do begin
-					if (j.kursi[z,x,c].duduk=true) then begin
-						write('X ');
-					end
-					else begin
-						write('O ');
+			end;	
+			for z := 1 to 4 do begin
+				for x := 1 to 10 do begin
+					for c := 1 to 4 do begin
+						if (j.kursi[z,x,c].duduk=true) then begin
+							write('X ');
+						end
+						else begin
+							write('O ');
+						end;
 					end;
+					writeln();
 				end;
 				writeln();
 			end;
-			writeln();
-		end;
+		end;		
 	end;
 end;
 
