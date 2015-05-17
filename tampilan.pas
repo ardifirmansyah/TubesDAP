@@ -21,7 +21,7 @@ type jadwalkereta = record
 	tiba : waktu;
 	gerbong : Integer;
 	tarif : Integer;
-	kursi : array[1..4,1..4,1..10] of bangku;									//[gerbong,kolom(a,b,c,d),baris(1..10)]
+	kursi : array[1..4,1..10,1..4] of bangku;									//[gerbong,kolom(a,b,c,d),baris(1..10)]
 end;
 
 var
@@ -34,6 +34,7 @@ var
 	tiket : Integer;
 	z,x,c : Integer;
 	isi : Boolean;
+	ketemu : Boolean;
 
 const
 	uc = 'user';
@@ -73,6 +74,77 @@ begin
 	close(jadwal);
 end;
 
+procedure Visualisasi();
+begin
+	for z := 1 to 4 do begin
+		for x := 1 to 10 do begin
+			for c := 1 to 4 do begin
+				if (j.kursi[z,x,c].duduk) then begin
+					write('X ');
+				end
+				else begin
+					write('O ');
+				end;
+			end;
+			writeln();
+		end;
+		writeln();
+	end;
+	reset(jadwal);
+end;
+
+procedure LihatKereta();
+begin
+	assign(jadwal,'JadwalKereta.dat');
+	reset(jadwal);
+	writeln('No.   Asal       Tujuan        Berangkat    Tiba     Tarif');
+	for i := 1 to FileSize(jadwal) do begin
+		read(jadwal,j);
+		gotoxy(1,i+1); write(j.nomor); gotoxy(7,i+1); write(j.asal); gotoxy(18,i+1); write(j.tujuan);
+		gotoxy(32,i+1); write(j.berangkat.jam,'.',j.berangkat.menit); gotoxy(45,i+1); write(j.tiba.jam,'.',j.tiba.menit);
+		gotoxy(54,i+1); write(j.tarif); writeln();
+	end;
+	writeln();
+	write('Masukkan pilihan tujuan : '); readln(carikereta);
+	case (carikereta) of
+	1	: begin
+		reset(jadwal);
+		while (carikereta<>j.nomor) do
+		begin
+			read(jadwal,j);
+		end;
+		Visualisasi();
+	end;
+	2	: begin
+		reset(jadwal);
+		while (carikereta<>j.nomor) do
+		begin
+			read(jadwal,j);
+		end;
+		Visualisasi();
+	end;
+	3	: begin
+		reset(jadwal);
+		while (carikereta<>j.nomor) do
+		begin
+			read(jadwal,j);
+		end;
+		Visualisasi();
+	end;
+	4	: begin
+		reset(jadwal);
+		while (carikereta<>j.nomor) do
+		begin
+			read(jadwal,j);
+		end;
+		Visualisasi();
+	end;
+		else
+			clrscr;
+			writeln('Daftar Kereta yang dipilih tidak ada');
+		end;
+end;
+
 procedure MenuAdmin();
 begin
 	repeat 																			//membuat kondisi agar setelah pilihan tidak keluar dari menu admin
@@ -101,7 +173,7 @@ begin
 		end;
 		3	: begin
 			clrscr;
-			writeln('Menu Detil Kereta'); readln();
+			LihatKereta(); readln();
 		end;
 		4	: begin
 			clrscr;
@@ -119,6 +191,15 @@ begin
 	until (pil=4);
 end;
 
+function ConvertKolom(a : Integer): Char;
+begin
+	case (a) of
+	1	: ConvertKolom:='A';
+	2	: ConvertKolom:='B';
+	3	: ConvertKolom:='C';
+	4	: ConvertKolom:='D';	
+	end;
+end;
 
 procedure penumpang();
 begin
@@ -135,32 +216,16 @@ begin
 	write('Masukkan pilihan tujuan : '); readln(carikereta);
 	case (carikereta) of
 	1	: begin
-		reset(jadwal);
-		while (carikereta<>j.nomor) do
-		begin
-			read(jadwal,j);
-		end;
+		seek(jadwal,1);
 	end;
 	2	: begin
-		reset(jadwal);
-		while (carikereta<>j.nomor) do
-		begin
-			read(jadwal,j);
-		end;
+		seek(jadwal,2);
 	end;
 	3	: begin
-		reset(jadwal);
-		while (carikereta<>j.nomor) do
-		begin
-			read(jadwal,j);
-		end;
+		seek(jadwal,3);
 	end;
 	4	: begin
-		reset(jadwal);
-		while (carikereta<>j.nomor) do
-		begin
-			read(jadwal,j);
-		end;
+		seek(jadwal,4);
 	end;
 		else
 			clrscr;
@@ -180,45 +245,59 @@ begin
 			writeln('Mohon maaf. Jumlah tiket tidak dapat kami proses');
 		end
 		else begin
-			z:=1;
-			isi:=false;
-			while (z<=4) and not isi do                       //untuk gerbong
-			begin
-				x:=1;
-				while (x<=10) and not isi do 				  //untuk baris
+			clrscr;
+			for i := 1 to tiket do begin
+				z:=1;
+				isi:=false;
+				while (z<=4) and (not isi) do                       //mengisi tempat duduk
 				begin
-					c:=1;
-					while (c<=4) and not isi do 			  //untuk kolom
+					x:=1;
+					while (x<=10) and (not isi) do 				  //untuk baris
 					begin
-						if (j.kursi[z,x,c].duduk=false) then begin
-							j.kursi[z,x,c].duduk:=true; tiket:=tiket-1;
-							if (tiket=0) then begin
+						c:=1;
+						while (c<=4) and (not isi) do 			  //untuk kolom
+						begin
+							if (j.kursi[z,x,c].duduk=false) then begin
+								j.kursi[z,x,c].duduk:=true;
 								isi:=true;
-							end;
-						end
-						else begin
-							c:=c+1;
-						end
-					end;
-					x:=x+1;
-				end;
-				z:=z+1;
-			end;	
-			for z := 1 to 4 do begin
-				for x := 1 to 10 do begin
-					for c := 1 to 4 do begin
-						if (j.kursi[z,x,c].duduk=true) then begin
-							write('X ');
-						end
-						else begin
-							write('O ');
+								write('Masukkan Nama Penumpang ',i,'          : '); readln(j.kursi[z,x,c].nama);
+								write('Masukkan No. Identitas penumpang ',i,' : '); readln(j.kursi[z,x,c].ID);
+								write('Masukkan No. Handphone penumpang ',i,' : '); readln(j.kursi[z,x,c].hp);
+								writeln('Kursi di : ',z,' ',x,' ',ConvertKolom(c));
+								seek(jadwal,carikereta);
+								write(jadwal,j);
+								writeln('----------------------------------------------------------');
+							end
+							else c:=c+1;
 						end;
+						x:=x+1;
 					end;
-					writeln();
+					z:=z+1;
 				end;
-				writeln();
+				close(jadwal);
 			end;
 		end;		
+	end;
+end;
+
+procedure Batalkan();
+var
+	IDs: String;
+begin
+	write('Masukkan No. Identitas yang Anda cari : '); readln(IDs);
+	ketemu:=false;
+	i:=1;
+	assign(jadwal,'JadwalKereta.dat');
+	reset(jadwal);
+	while (1<=FileSize(jadwal)) do
+	begin
+		
+	end;
+	if (ketemu) then begin
+		writeln('Menu edit batal');
+	end
+	else begin
+		writeln('No. Identitas Tidak Ditemukan');
 	end;
 end;
 
@@ -245,7 +324,7 @@ begin
 		end;
 		2	: begin
 			clrscr;
-			writeln('Menu edit / batalkan pesanan');
+			Batalkan();
 			readln();
 		end;
 		3	: begin
