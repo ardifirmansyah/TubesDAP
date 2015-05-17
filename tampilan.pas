@@ -76,6 +76,8 @@ end;
 
 procedure Visualisasi();
 begin
+	read(jadwal,j);
+	seek(jadwal,carikereta);
 	for z := 1 to 4 do begin
 		for x := 1 to 10 do begin
 			for c := 1 to 4 do begin
@@ -106,43 +108,15 @@ begin
 	end;
 	writeln();
 	write('Masukkan pilihan tujuan : '); readln(carikereta);
-	case (carikereta) of
-	1	: begin
-		reset(jadwal);
-		while (carikereta<>j.nomor) do
-		begin
-			read(jadwal,j);
-		end;
-		Visualisasi();
-	end;
-	2	: begin
-		reset(jadwal);
-		while (carikereta<>j.nomor) do
-		begin
-			read(jadwal,j);
-		end;
-		Visualisasi();
-	end;
-	3	: begin
-		reset(jadwal);
-		while (carikereta<>j.nomor) do
-		begin
-			read(jadwal,j);
-		end;
-		Visualisasi();
-	end;
-	4	: begin
-		reset(jadwal);
-		while (carikereta<>j.nomor) do
-		begin
-			read(jadwal,j);
-		end;
-		Visualisasi();
-	end;
+	reset(jadwal);
+	seek(jadwal,carikereta-1);
+	Visualisasi();
+	{
 		else
 			clrscr;
 			writeln('Daftar Kereta yang dipilih tidak ada');
 		end;
+	}
 end;
 
 procedure MenuAdmin();
@@ -216,16 +190,32 @@ begin
 	write('Masukkan pilihan tujuan : '); readln(carikereta);
 	case (carikereta) of
 	1	: begin
-		seek(jadwal,1);
+		reset(jadwal);
+		while (carikereta<>j.nomor) do
+		begin
+			read(jadwal,j);
+		end;
 	end;
 	2	: begin
-		seek(jadwal,2);
+		reset(jadwal);
+		while (carikereta<>j.nomor) do
+		begin
+			read(jadwal,j);
+		end;
 	end;
 	3	: begin
-		seek(jadwal,3);
+		reset(jadwal);
+		while (carikereta<>j.nomor) do
+		begin
+			read(jadwal,j);
+		end;
 	end;
 	4	: begin
-		seek(jadwal,4);
+		reset(jadwal);
+		while (carikereta<>j.nomor) do
+		begin
+			read(jadwal,j);
+		end;
 	end;
 		else
 			clrscr;
@@ -258,13 +248,13 @@ begin
 						while (c<=4) and (not isi) do 			  //untuk kolom
 						begin
 							if (j.kursi[z,x,c].duduk=false) then begin
+								seek(jadwal,carikereta-1);
 								j.kursi[z,x,c].duduk:=true;
 								isi:=true;
 								write('Masukkan Nama Penumpang ',i,'          : '); readln(j.kursi[z,x,c].nama);
 								write('Masukkan No. Identitas penumpang ',i,' : '); readln(j.kursi[z,x,c].ID);
 								write('Masukkan No. Handphone penumpang ',i,' : '); readln(j.kursi[z,x,c].hp);
 								writeln('Kursi di : ',z,' ',x,' ',ConvertKolom(c));
-								seek(jadwal,carikereta);
 								write(jadwal,j);
 								writeln('----------------------------------------------------------');
 							end
