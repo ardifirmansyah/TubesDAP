@@ -7,11 +7,10 @@ type waktu = record
 end;
 
 type bangku = record
-	baris : Integer;
-	kolom : Integer;
-	kosong : Boolean;
 	nama : String;
 	ID : String;
+	hp : String;
+	duduk : Boolean;
 end;
 
 type jadwalkereta = record
@@ -22,7 +21,7 @@ type jadwalkereta = record
 	tiba : waktu;
 	gerbong : Integer;
 	tarif : Integer;
-	kursi : bangku;
+	kursi : array[1..4,1..4,1..10] of bangku;									//[gerbong,kolom(a,b,c,d),baris(1..10)]
 end;
 
 var
@@ -31,6 +30,10 @@ var
 	jadwal : file of jadwalkereta;
 	j: jadwalkereta;
 	pil,i : Integer;
+	carikereta : Integer;
+	tiket : Integer;
+	z,x,c : Integer;
+	isi : Boolean;
 
 const
 	uc = 'user';
@@ -116,18 +119,108 @@ begin
 	until (pil=4);
 end;
 
+
 procedure penumpang();
 begin
 	assign(jadwal,'JadwalKereta.dat');
 	reset(jadwal);
-	writeln('No.   Asal       Tujuan        Berangkat   Tiba     Tarif');
+	writeln('No.   Asal       Tujuan        Berangkat    Tiba     Tarif');
 	for i := 1 to 4 do begin
 		read(jadwal,j);
-		writeln(j.nomor,'.    ',j.asal,'    ',j.tujuan,'    ',j.berangkat.jam,'.',j.berangkat.menit,'       ',j.tiba.jam,'.',j.tiba.menit,'    ',j.tarif);
+		gotoxy(1,i+1); write(j.nomor); gotoxy(7,i+1); write(j.asal); gotoxy(18,i+1); write(j.tujuan);
+		gotoxy(32,i+1); write(j.berangkat.jam,'.',j.berangkat.menit); gotoxy(45,i+1); write(j.tiba.jam,'.',j.tiba.menit);
+		gotoxy(54,i+1); write(j.tarif); writeln();
 	end;
 	writeln();
-	write('Masukkan pilihan tujuan : '); readln(pil);
-	
+	write('Masukkan pilihan tujuan : '); readln(carikereta);
+	case (carikereta) of
+	1	: begin
+		reset(jadwal);
+		while (carikereta<>j.nomor) do
+		begin
+			read(jadwal,j);
+		end;
+	end;
+	2	: begin
+		reset(jadwal);
+		while (carikereta<>j.nomor) do
+		begin
+			read(jadwal,j);
+		end;
+	end;
+	3	: begin
+		reset(jadwal);
+		while (carikereta<>j.nomor) do
+		begin
+			read(jadwal,j);
+		end;
+	end;
+	4	: begin
+		reset(jadwal);
+		while (carikereta<>j.nomor) do
+		begin
+			read(jadwal,j);
+		end;
+	end;
+		else
+			clrscr;
+			writeln('Tujuan tidak ada');
+		end;
+
+	if (carikereta=j.nomor) then begin
+		clrscr;
+		writeln('No.   Asal       Tujuan        Berangkat    Tiba     Tarif');
+		gotoxy(1,3); write(j.nomor); gotoxy(7,3); write(j.asal); gotoxy(18,3); write(j.tujuan);
+		gotoxy(32,3); write(j.berangkat.jam,'.',j.berangkat.menit); gotoxy(45,3); write(j.tiba.jam,'.',j.tiba.menit);
+		gotoxy(54,3); write(j.tarif); writeln();
+		writeln();
+		write('Masukkan jumlah tiket yang akan dipesan (maks 4) : '); readln(tiket);
+		if (tiket>4) then begin
+			clrscr;
+			writeln('Mohon maaf. Jumlah tiket tidak dapat kami proses');
+		end
+		else begin
+			z:=1;
+			isi:=false;
+			while (z<=4) and not isi do                       //untuk gerbong
+			begin
+				x:=1;
+				while (x<=10) and not isi do 				  //untuk baris
+				begin
+					c:=1;
+					while (c<=4) and not isi do 			  //untuk kolom
+					begin
+						if (j.kursi[z,x,c].duduk=false) then begin
+							j.kursi[z,x,c].duduk:=true; tiket:=tiket-1;
+							if (tiket=0) then begin
+								isi:=true;
+							end;
+						end
+						else begin
+							c:=c+1;
+						end
+					end;
+					x:=x+1;
+				end;
+				z:=z+1;
+			end;
+		end;
+
+		for z := 1 to 4 do begin
+			for x := 1 to 10 do begin
+				for c := 1 to 4 do begin
+					if (j.kursi[z,x,c].duduk=true) then begin
+						write('X ');
+					end
+					else begin
+						write('O ');
+					end;
+				end;
+				writeln();
+			end;
+			writeln();
+		end;
+	end;
 end;
 
 procedure MenuUser();
