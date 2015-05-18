@@ -318,24 +318,88 @@ begin
 	end;
 end;
 
+procedure Batal();
+var
+	input: Char;
+begin
+	writeln('No. Identitas  : ',j.kursi[z,x,c].ID);
+	writeln('Nama Penumpang : ',j.kursi[z,x,c].nama);
+	writeln('No. Handphone  : ',j.kursi[z,x,c].hp);
+	writeln();
+	write('Apakah Anda ingin membatalkan pesanan? (y/n) : '); readln(input);
+	case (input) of
+	'y'	: begin
+		j.kursi[z,x,c].nama:='';
+		j.kursi[z,x,c].ID:='';
+		j.kursi[z,x,c].duduk:=false;
+		j.kursi[z,x,c].hp:='';
+		write(jadwal,j);
+		writeln('Pembatalan berhasil dilakukan');
+	end;
+		else
+			writeln('Pembatalan pesanan gagal');
+		end;
+end;
+
+procedure Edit();
+begin
+	write('Masukkan Nama Penumpang          : '); readln(j.kursi[z,x,c].nama);
+	write('Masukkan No. Identitas penumpang : '); readln(j.kursi[z,x,c].ID);
+	write('Masukkan No. Handphone penumpang : '); readln(j.kursi[z,x,c].hp);
+	write(jadwal,j);
+end;
+
 procedure Batalkan();
 var
 	IDs: String;
 begin
 	write('Masukkan No. Identitas yang Anda cari : '); readln(IDs);
 	ketemu:=false;
-	i:=1;
 	assign(jadwal,'JadwalKereta.dat');
 	reset(jadwal);
-	while (1<=FileSize(jadwal)) do
+	i:=1;
+	while (i<=FileSize(jadwal)) and (not ketemu) do
 	begin
-		
+		read(jadwal,j);
+		z:=1;
+		while (z<=4) and (not ketemu) do
+		begin
+			x:=1;
+			while (x<=10) and (not ketemu) do
+			begin
+				c:=1;
+				while (c<=4) and (not ketemu) do
+				begin
+					if (IDs=j.kursi[z,x,c].ID) then begin
+						ketemu:=true;
+						writeln('1. Edit');
+						writeln('2. Batalkan');
+						writeln();
+						write('Masukkan pilihan Anda : '); readln(pil);
+						case (pil) of
+						1	: begin
+							Edit();
+						end;
+						2	: begin
+							Batal();
+						end;
+							else
+								clrscr;
+								writeln('Input tidak Terdaftar');
+							end;
+					end
+					else begin
+						c:=c+1;						
+					end;
+				end;
+				x:=x+1;
+			end;
+			z:=z+1
+		end;
+		i:=i+1;
 	end;
-	if (ketemu) then begin
-		writeln('Menu edit batal');
-	end
-	else begin
-		writeln('No. Identitas Tidak Ditemukan');
+	if (ketemu=false) then begin
+		writeln('Data tidak ditemukan');
 	end;
 end;
 
